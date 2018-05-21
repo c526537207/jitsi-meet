@@ -1690,6 +1690,7 @@ export default {
             APP.store.dispatch(participantJoined({
                 id,
                 name: displayName,
+                presence: user.getStatus(),
                 role: user.getRole()
             }));
 

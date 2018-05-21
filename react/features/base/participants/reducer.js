@@ -78,6 +78,7 @@ function _participant(state: Object = {}, action) {
             local,
             name,
             pinned,
+            presence,
             role
         } = participant;
         let { avatarID, id } = participant;
@@ -109,6 +110,7 @@ function _participant(state: Object = {}, action) {
             local: local || false,
             name,
             pinned: pinned || false,
+            presence,
             role: role || PARTICIPANT_ROLE.NONE
         };
     }
