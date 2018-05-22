@@ -144,9 +144,15 @@ function _addConferenceListeners(conference, dispatch) {
             name: user.getDisplayName(),
             role: user.getRole()
         })));
+
+    // FIXME For the purposes of demonstrating the removal of remote
+    // participants in response to redux store/state changes, do not remove them
+    // in response to JitsiConference's event JitsiConferenceEvents.USER_LEFT.
+    //
     conference.on(
-        JitsiConferenceEvents.USER_LEFT,
-        (...args) => dispatch(participantLeft(...args)));
+         JitsiConferenceEvents.USER_LEFT,
+         (...args) => participantLeft(...args));
+
     conference.on(
         JitsiConferenceEvents.USER_ROLE_CHANGED,
         (...args) => dispatch(participantRoleChanged(...args)));

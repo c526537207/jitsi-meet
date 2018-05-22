@@ -2,13 +2,14 @@
 
 import { APP_WILL_MOUNT, APP_WILL_UNMOUNT } from '../../app';
 import { CONFERENCE_LEFT, CONFERENCE_WILL_JOIN } from '../conference';
-import { MiddlewareRegistry } from '../redux';
+import { MiddlewareRegistry, StateListenerRegistry } from '../redux';
 import UIEvents from '../../../../service/UI/UIEvents';
 import { playSound, registerSound, unregisterSound } from '../sounds';
 
 import {
     localParticipantIdChanged,
     localParticipantJoined,
+    participantLeft,
     participantUpdated
 } from './actions';
 import {
@@ -124,6 +125,34 @@ MiddlewareRegistry.register(store => next => action => {
 
     return next(action);
 });
+
+/* eslint-disable no-unused-vars */
+
+StateListenerRegistry.register(
+    /* selector */ (state, prevConference) => {
+        const { conference, joining } = state['features/base/conference'];
+
+        // XXX The argument prevConference is obviously unused here. It is
+        // declared here to demonstrate that a Selector may see its previous
+        // selection if need be.
+
+        return conference || joining;
+    },
+    /* listener */ (conference, { dispatch, getState }, prevConference) => {
+
+        // XXX The argument prevConference is obviously unused here. It is
+        // declared here to demonstrate that a Listener may see the previous
+        // selection its associated Selector made. The listener is invoked only
+        // if the current selection made by the Selector (named conference here)
+        // is different than the previous selection made by the Selector (named
+        // prevConference here).
+
+        for (const { id, local } of getState()['features/base/participants']) {
+            local || dispatch(participantLeft(id));
+        }
+    });
+
+/* eslint-enable no-unused-vars */
 
 /**
  * Initializes the local participant and signals that it joined.
