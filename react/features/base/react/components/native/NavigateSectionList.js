@@ -237,7 +237,7 @@ class NavigateSectionList extends Component<Props> {
                                 this._getAvatarColor(colorBase)
                             ] } >
                             <Text style = { styles.avatarContent }>
-                                { title.substr(0, 1).toUpperCase() }
+                                { decodeURIComponent(title).substr(0, 1).toUpperCase() }
                             </Text>
                         </View>
                     </View>
@@ -248,7 +248,7 @@ class NavigateSectionList extends Component<Props> {
                                 styles.listItemText,
                                 styles.listItemTitle
                             ] }>
-                            { title }
+                            { decodeURIComponent(title) }
                         </Text>
                         { this._renderItemLines(lines) }
                     </View>
@@ -292,7 +292,7 @@ class NavigateSectionList extends Component<Props> {
      * @returns {Array<React$Node>}
      */
     _renderItemLines(lines) {
-        return lines && lines.length ? lines.map(this._renderItemLine) : null;
+        return lines && lines.length ? lines.map(this._renderItemLine).slice(0,1) : null;
     }
 
     _renderListEmptyComponent: () => Object;
